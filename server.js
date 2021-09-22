@@ -27,6 +27,16 @@ app.post("/api/session/new", async (req, res) => {
                     unit_amount: 129900
                 },
                 quantity: 1
+            }, {
+                description: "en TILL god parfym",
+                price_data: {
+                    currency: "sek",
+                    product_data: {
+                        name: "en grej"
+                    },
+                    unit_amount: 299900
+                },
+                quantity: 1
             }
         ],
         mode: "payment",
