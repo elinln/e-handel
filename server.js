@@ -5,6 +5,7 @@ const express = require('express');
 const stripe = require('stripe')(secretKey);
 
 const app = express();
+app.use(express.json())
 
 app.get('/api', (req, res) => {
     res.status(200).send("helloooo");
@@ -14,31 +15,27 @@ app.use(express.static('public'))
 
 
 app.post("/api/session/new", async (req, res) => {
+    let products = req.body.products;
+    let perfumesToStripe = [];
+
+    products.forEach((product) => {
+        let line_item = {
+            description: product.description,
+            price_data: {
+                currency: "sek",
+                product_data: {
+                    name: product.title,
+                },
+                unit_amount: product.price * 100,
+            },
+            quantity: product.quantity || 1,
+        }
+        perfumesToStripe.push(line_item);
+    })
+
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
-        line_items: [
-            {
-                description: "en god parfym",
-                price_data: {
-                    currency: "sek",
-                    product_data: {
-                        name: "parfym"
-                    },
-                    unit_amount: 129900
-                },
-                quantity: 1
-            }, {
-                description: "en TILL god parfym",
-                price_data: {
-                    currency: "sek",
-                    product_data: {
-                        name: "en grej"
-                    },
-                    unit_amount: 299900
-                },
-                quantity: 1
-            }
-        ],
+        line_items: perfumesToStripe,
         mode: "payment",
         success_url: "http://localhost:3000/success_checkout.html",
         cancel_url: "http://localhost:3000/index.html"
@@ -50,4 +47,6 @@ app.post("/api/session/new", async (req, res) => {
 
 app.listen(3000, () => {
     console.log("server is running!");
-})
+});
+
+

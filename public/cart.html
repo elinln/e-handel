@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kundvagn</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./cart.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <script src="https://js.stripe.com/v3/"></script>
@@ -16,10 +16,12 @@
     <nav class="navbar navbar-light fixed-top class=" style="background-color: #d4beb2;"
         style="font-family: sans-serif;">
         <div class=" container-fluid">
-            <a class="navbar-brand" href="./index.html">Parfymeriet</a>
+            <h1>
+                <a class="navbar-brand" style="color: #564f4c;" href="./index.html">Parfymeriet</a>
+            </h1>
             <div class="displayCart">
-                <a class="nav-link" style="color: #625b58;" href="./cart.html">Cart</a>
-                <span id="cartNumber"></span>
+                <a class="nav-link" style="color: #564f4c; padding: 9px;" href="./cart.html">Kundvagn: <span
+                        id="cartNumber"></span></a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
                 aria-controls="offcanvasNavbar">
@@ -35,16 +37,12 @@
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                            <a class="nav-link active" aria-current="page" href="./index.html">Startsida</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./cart.html">Cart</a>
+                            <a class="nav-link" href="./cart.html">Gå till kundvagn</a>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -55,15 +53,17 @@
     <main>
         <div id=headLine>
             <h1>Kundvagn</h1>
+            <h2 id="emptyCart"></h2>
         </div>
 
         <div id="cartButton">
-            <div id="cartProducts"> </div>
-            <div id="totalAmount"> </div>
+            <div id="cartProducts"></div>
+            <div id="totalAmount"></div>
+
         </div>
 
         <div class="purchaseContainer">
-            <button id="puchase_button">Slutför ditt köp (real)</button>
+            <button id="puchase_button">Slutför ditt köp</button>
         </div>
     </main>
 

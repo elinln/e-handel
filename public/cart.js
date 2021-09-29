@@ -3,36 +3,24 @@ const purchaseButton = document.getElementById('puchase_button');
 let stripe = Stripe('pk_test_51JbgfPCB4BGOldQPscttff0yC0UX2zKEgPJkjLeNu2UyFqO5DtOIHGAK7UE3jHCKUNHxEO8XEVW23uMmFPtRP5P000ZaMfINHj');
 
 
-purchaseButton.addEventListener('click', async () => {
-    const response = await fetch('/api/session/new', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" }
-    });
-
-    const { id } = await response.json();
-    console.log(stripe);
-    stripe.redirectToCheckout({ sessionId: id });
-
-});
-
 var totalAmount = 0
 
 function initSite() {
     ShowProductsInCart()
     updateCartCount()
+    getCartProducts()
 }
 
-function addProductsToWebpage() { }
+
+var listOfProducts = getCartProducts()
 
 function ShowProductsInCart() {
 
-    let container = document.getElementById("cartProducts")
-    container.style.display = "flex"
-    container.style.justifyContent = "center"
-    container.style.flexDirection = "row"
+    let container = document.getElementById("cartProducts");
+    container.style.display = "flex";
+    container.style.alignItems = "center";
+    container.style.flexDirection = "column";
 
-
-    var listOfProducts = getCartProducts()
 
     for (let i = 0; i < listOfProducts.length; i++) {
         const product = listOfProducts[i];
@@ -40,24 +28,23 @@ function ShowProductsInCart() {
 
         totalAmount = totalAmount + product.price
 
-        let displayPhone = document.createElement("div")
-        displayPhone.classList.add("products", "cart")
+        let displayProduct = document.createElement("div")
+        displayProduct.classList.add("products", "cart")
 
         let itemPhoto = document.createElement("img")
         itemPhoto.src = "/assets/" + product.image
         itemPhoto.classList.add("cartPhoto")
-        displayPhone.appendChild(itemPhoto)
+        displayProduct.appendChild(itemPhoto)
 
         let itemTitle = document.createElement("h1")
         itemTitle.classList.add("cartTitle")
         itemTitle.textContent = product.title
-        displayPhone.appendChild(itemTitle)
+        displayProduct.appendChild(itemTitle)
 
         let itemPrice = document.createElement("h3")
         itemPrice.classList.add("itemPrice")
         itemPrice.textContent = `${product.price} kr`
-
-        displayPhone.appendChild(itemPrice)
+        displayProduct.appendChild(itemPrice)
 
 
         let itemButton = document.createElement("button")
@@ -71,9 +58,10 @@ function ShowProductsInCart() {
                 return cartIndex != productIndex
             })
             localStorage.cart = JSON.stringify(cart)
-            window.location.reload()
+            container.removeChild(displayProduct)
+            return
         })
-        displayPhone.appendChild(itemButton)
+        displayProduct.appendChild(itemButton)
 
 
         let itemSpan = document.createElement("span")
@@ -82,7 +70,7 @@ function ShowProductsInCart() {
         itemButton.appendChild(itemSpan)
 
 
-        container.appendChild(displayPhone)
+        container.appendChild(displayProduct)
     }
 
     let totalAmountElement = document.getElementById("totalAmount")
@@ -90,7 +78,6 @@ function ShowProductsInCart() {
 
 
 }
-
 
 
 function getCartProducts() {
@@ -106,3 +93,34 @@ function updateCartCount() {
     document.getElementById("cartNumber").textContent = count
 
 }
+
+purchaseButton.addEventListener('click', async () => {
+    let currentCart = localStorage.getItem("cart");
+
+    if (currentCart === undefined) {
+        currentCart = []
+    } else {
+        currentCart = JSON.parse(localStorage.cart)
+    }
+
+
+    console.log(currentCart)
+
+    let respone = await fetch("/api/session/new", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ products: currentCart })
+    })
+        .then((result) => {
+            return result.json();
+        })
+        .then((session) => {
+            console.log(session);
+            localStorage.setItem("sessionID", session.id);
+            localStorage.setItem("cart", currentCart);
+            localStorage.removeItem("cart");
+            return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .catch((err) => console.error(err));
+
+});
