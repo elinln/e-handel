@@ -38,7 +38,7 @@ app.post("/api/session/new", async (req, res) => {
         line_items: perfumesToStripe,
         mode: "payment",
         success_url: "http://localhost:3000/success_checkout.html",
-        cancel_url: "http://localhost:3000/index.html"
+        cancel_url: "http://localhost:3000/canceled_checkout.html"
     });
     res.status(200).json({ id: session.id })
 })
