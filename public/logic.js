@@ -1,16 +1,4 @@
-
-
-/* 
-const addToCartButton = document.getElementById("add_to_cart_button");
-
-addToCartButton.addEventListener('click', () => {
-    console.log("Added to cart.")
-}) */
-
-
 var listOfProducts;
-console.log(listOfProducts)
-
 
 function loadProducts() {
     fetch("./products.json")
@@ -26,44 +14,40 @@ function loadProducts() {
 
 function initSite() {
     loadProducts();
-/*     updateCartCount();
- */}
+    updateCartCount();
+}
 
 function addProductsToWebpage() {
     let container = document.getElementById("productList")
-    /* container.style.display = "flex"
-    container.style.justifyContent = "center"
-    container.style.flexDirection = "column" */
 
     for (let i = 0; i < listOfProducts.length; i++) {
         const product = listOfProducts[i];
 
 
-        let displayPhone = document.createElement("div")
-        displayPhone.classList.add("products", "gallery")
+        let displayProduct = document.createElement("div")
+        displayProduct.classList.add("products", "gallery")
 
         let itemTitle = document.createElement("h1")
         itemTitle.classList.add("itemTitle")
         itemTitle.textContent = product.title
-        displayPhone.appendChild(itemTitle)
+        displayProduct.appendChild(itemTitle)
 
 
         let itemBeskrivning = document.createElement("h4")
         itemBeskrivning.classList.add("itemBeskrivning")
         itemBeskrivning.textContent = product.description
-        displayPhone.appendChild(itemBeskrivning)
+        displayProduct.appendChild(itemBeskrivning)
 
         let itemPhoto = document.createElement("img")
         itemPhoto.src = "/assets/" + product.image
         itemPhoto.classList.add("itemPhoto")
-        displayPhone.appendChild(itemPhoto)
+        displayProduct.appendChild(itemPhoto)
 
 
         let itemPrice = document.createElement("h3")
         itemPrice.classList.add("itemPrice")
         itemPrice.textContent = `${product.price} kr`
-
-        displayPhone.appendChild(itemPrice)
+        displayProduct.appendChild(itemPrice)
 
 
         let itemButton = document.createElement("button")
@@ -83,7 +67,7 @@ function addProductsToWebpage() {
             updateCartCount()
 
         })
-        displayPhone.appendChild(itemButton)
+        displayProduct.appendChild(itemButton)
 
         let itemSpan = document.createElement("span")
         itemSpan.textContent = "Lägg till i kundvagn"
@@ -91,7 +75,7 @@ function addProductsToWebpage() {
         itemButton.appendChild(itemSpan)
 
 
-        container.appendChild(displayPhone)
+        container.appendChild(displayProduct)
     }
 
     document.body.appendChild(container)
