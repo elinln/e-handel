@@ -26,6 +26,8 @@ header {
     margin-top: 100px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .displayCart {
@@ -34,6 +36,12 @@ header {
     justify-content: flex-end;
     align-items: center;
     color: #625b58;
+}
+
+.displayCart:hover {
+    background-color: rgba(95, 93, 93, 0.218);
+    border-radius: 8px;
+
 }
 
 #cartNumber {
