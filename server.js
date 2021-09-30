@@ -47,7 +47,7 @@ app.post("/api/session/new", async (req, res) => {
 app.post("/api/session/verify", async (req, res) => {
     const sessionId = req.body.sessionId;
 
-    const session = await stripe.checkout.sessions.retrive(sessionId);
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
     res.status(200).json({ id: session.id });
     console.log(session);
 });
