@@ -99,7 +99,7 @@ const verify = async () => {
     try {
         const sessionId = localStorage.getItem("session");
 
-        if (!sessionsId) {
+        if (!sessionId) {
             throw new Error("No session id to verify");
         }
 
@@ -107,14 +107,20 @@ const verify = async () => {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({
-                line_items: Object.values(cart)
+                sessionId: sessionId
             })
         });
         const { id } = await response.json();
-        localStorage.setItem("session", id);
-        Stripe.redirectToCheckout({sessionId: id});
+        return true;
     }
     catch (err) {
         console.error(err);
+        return false;
     }
 }
+
+async function main() {
+    await verify();
+}
+
+main();
