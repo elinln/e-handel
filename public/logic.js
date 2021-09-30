@@ -63,7 +63,8 @@ function addProductsToWebpage() {
             }
 
             cart.push(product)
-            localStorage.cart = JSON.stringify(cart)
+            console.log(product)
+            localStorage.setItem('cart', JSON.stringify(cart))
             updateCartCount()
 
         })

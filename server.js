@@ -3,13 +3,8 @@ require('dotenv').config('.env');
 const secretKey = process.env.STRIPE_SECRET_KEY;
 const express = require('express');
 const stripe = require('stripe')(secretKey);
-
 const app = express();
-app.use(express.json())
-
-app.get('/api', (req, res) => {
-    res.status(200).send("helloooo");
-})
+app.use('/api', express.json())
 
 app.use(express.static('public'))
 

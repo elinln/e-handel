@@ -21,12 +21,14 @@ function ShowProductsInCart() {
     container.style.alignItems = "center";
     container.style.flexDirection = "column";
 
+    let currentCart = localStorage.getItem("cart");
+    currentCart = JSON.parse(currentCart);
+    console.log(currentCart)
+
 
     for (let i = 0; i < listOfProducts.length; i++) {
         const product = listOfProducts[i];
         const productIndex = i;
-
-        totalAmount = totalAmount + product.price
 
         let displayProduct = document.createElement("div")
         displayProduct.classList.add("products", "cart")
@@ -55,33 +57,36 @@ function ShowProductsInCart() {
             var cart = getCartProducts()
 
             cart = cart.filter(function (_, cartIndex) {
-                return cartIndex != productIndex
+                return cartIndex != productIndex;
             })
             localStorage.cart = JSON.stringify(cart)
+            localStorage.removeItem(productIndex);
             container.removeChild(displayProduct)
+            totalAmount = totalAmount - product.price
+            let totalAmountElement = document.getElementById("totalAmount")
+            totalAmountElement.textContent = `Totalt pris: ${totalAmount} kr`
+            updateCartCount()
             return
         })
-        displayProduct.appendChild(itemButton)
 
+        displayProduct.appendChild(itemButton)
 
         let itemSpan = document.createElement("span")
         itemSpan.textContent = "Ta Bort"
-
         itemButton.appendChild(itemSpan)
 
-
         container.appendChild(displayProduct)
+
+        totalAmount = totalAmount + product.price
+
+        let totalAmountElement = document.getElementById("totalAmount")
+        totalAmountElement.textContent = `Totalt pris: ${totalAmount} kr`
     }
-
-    let totalAmountElement = document.getElementById("totalAmount")
-    totalAmountElement.textContent = `Totalt pris: ${totalAmount} kr`
-
 
 }
 
 
 function getCartProducts() {
-
     if (localStorage.cart !== undefined) {
         return JSON.parse(localStorage.cart)
     }
@@ -89,8 +94,18 @@ function getCartProducts() {
 }
 
 function updateCartCount() {
-    var count = getCartProducts().length
+    let currentCart = localStorage.getItem("cart");
+    currentCart = JSON.parse(currentCart);
+    console.log(currentCart)
+
+    let count = currentCart.length
     document.getElementById("cartNumber").textContent = count
+
+    if (count === 0) {
+        let emptyCart = document.getElementById('totalAmount')
+        emptyCart.innerText = "Kundvagnen är tom..."
+        return
+    }
 
 }
 
@@ -102,7 +117,6 @@ purchaseButton.addEventListener('click', async () => {
     } else {
         currentCart = JSON.parse(localStorage.cart)
     }
-
 
     console.log(currentCart)
 
@@ -122,5 +136,4 @@ purchaseButton.addEventListener('click', async () => {
             return stripe.redirectToCheckout({ sessionId: session.id });
         })
         .catch((err) => console.error(err));
-
 });
