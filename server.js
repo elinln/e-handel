@@ -48,7 +48,14 @@ app.post("/api/session/verify", async (req, res) => {
     const sessionId = req.body.sessionId;
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    res.status(200).json({ id: session.id });
+
+    if (session.payment_status == "paid") {
+        //Spara lämplig information i JSON
+        res.status(200).json({ paid: true });
+    } else {
+        res.status(200).json({ paid: false });
+    }
+
     console.log(session);
 });
 

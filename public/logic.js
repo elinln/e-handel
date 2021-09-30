@@ -110,8 +110,8 @@ const verify = async () => {
                 sessionId: sessionId
             })
         });
-        const { id } = await response.json();
-        return true;
+        const { paid } = await response.json();
+        return paid;
     }
     catch (err) {
         console.error(err);
@@ -120,7 +120,15 @@ const verify = async () => {
 }
 
 async function main() {
-    await verify();
+    const isVerified = await verify();
+    console.log("isVerified", isVerified);
+
+    if (isVerified) {
+        alert("Tack för ditt köp!")
+    } else {
+        alert("Jaha.")
+    }
+    localStorage.removeItem("session");
 }
 
 main();
