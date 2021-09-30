@@ -119,10 +119,11 @@ const verify = async () => {
     }
 }
 
-async function main() {
+/*async function main() {
     const isVerified = await verify();
     console.log("isVerified", isVerified);
 
+    if (localStorage.getItem("session")) {
     if (isVerified) {
         alert("Tack för ditt köp!")
     } else {
@@ -131,4 +132,4 @@ async function main() {
     localStorage.removeItem("session");
 }
 
-main();
+main();*/
