@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    color: rgb(107, 96, 96);
+    background-color: #fdf2e3;
+    background-image: url('./assets/jessica.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.startLine {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: rgb(72 64 64);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(228, 217, 186);
+    padding: 10px;
+}
