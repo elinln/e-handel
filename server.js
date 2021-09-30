@@ -41,8 +41,16 @@ app.post("/api/session/new", async (req, res) => {
         cancel_url: "http://localhost:3000/canceled_checkout.html"
     });
     res.status(200).json({ id: session.id })
-})
+    
+});
 
+app.post("/api/session/verify", async (req, res) => {
+    const sessionId = req.body.sessionId;
+
+    const session = await stripe.checkout.sessions.retrive(sessionId);
+    res.status(200).json({ id: session.id });
+    console.log(session);
+});
 
 
 app.listen(3000, () => {
