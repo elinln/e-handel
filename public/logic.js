@@ -1,3 +1,5 @@
+const { default: Stripe } = require("stripe");
+
 var listOfProducts;
 
 function loadProducts() {
@@ -91,4 +93,28 @@ function updateCartCount() {
     }
 
     document.getElementById("cartNumber").textContent = count
+}
+
+const verify = async () => {
+    try {
+        const sessionId = localStorage.getItem("session");
+
+        if (!sessionsId) {
+            throw new Error("No session id to verify");
+        }
+
+        const response = await fetch('/api/session/verify', {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+                line_items: Object.values(cart)
+            })
+        });
+        const { id } = await response.json();
+        localStorage.setItem("session", id);
+        Stripe.redirectToCheckout({sessionId: id});
+    }
+    catch (err) {
+        console.error(err);
+    }
 }
