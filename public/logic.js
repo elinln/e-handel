@@ -99,7 +99,7 @@ function updateCartCount() {
 const verify = async () => {
     try {
         const sessionId = localStorage.getItem("session");
-
+console.log(sessionId)
         if (!sessionId) {
             throw new Error("No session id to verify");
         }
@@ -120,7 +120,7 @@ const verify = async () => {
     }
 }
 
-/*async function main() {
+async function checkVerification() {
     const isVerified = await verify();
     console.log("isVerified", isVerified);
 
@@ -131,6 +131,7 @@ const verify = async () => {
         alert("Jaha.")
     }
     localStorage.removeItem("session");
-}
+} }
 
-main();*/
+checkVerification();
+

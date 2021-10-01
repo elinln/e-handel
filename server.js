@@ -3,6 +3,7 @@ require('dotenv').config('.env');
 const secretKey = process.env.STRIPE_SECRET_KEY;
 const express = require('express');
 const stripe = require('stripe')(secretKey);
+const fs = require("fs")
 const jsonDB = {
     //"payment_id": sessionObjec
 };
@@ -53,6 +54,74 @@ app.post("/api/session/new", async (req, res) => {
 });
 
 app.post("/api/session/verify", async (req, res) => {
+    const session = await stripe.checkout.sessions.retrieve(
+      req.body.session,
+      {
+        expand: ["line_items"],
+      }
+    );
+  
+    if (session.payment_status == "paid") {
+      //Spara
+      
+      
+      const key = session.payment_intent;
+  
+      let raw = fs.readFileSync("orders.json");
+      let data = JSON.parse(raw);
+      let checkfordouble = data.find((orderdata) => {
+        return req.body.session == session.id
+      })
+      if (checkfordouble) {
+        res.json("Denna ordern finns redan")
+        return
+      }
+    
+     
+      let order = {
+        sessionID: req.body.session, 
+        totaltprice: session.amount_total
+      }
+      data.push(order)
+      fs.writeFileSync("orders.json", JSON.stringify(data));
+      res.json("Det funkar")
+  
+      /*if (!data[key]) {
+        data[key] = {
+          sessionId: req.params.sessionId,
+          paymentIntent: session.payment_intent,
+          date: new Date(),
+          totalPrice: session.amount_total,
+          currency: session.currency,
+          products: session.line_items.data.map(
+            ({ id, description, price, amount_total }) => {
+              return {
+                id: id,
+                description: description,
+                unit_price: price.unit_amount,
+                currency: price.currency,
+                totalPrice: amount_total,
+              };
+            }
+          ),
+        };
+        data.push(data[key]);
+        fs.writeFileSync("orders.json", JSON.stringify(data));
+      }
+      res.status(200).json({ paid: true });*/
+    } else {
+      res.status(200).json({ paid: false });
+    }
+  });
+  
+  app.get("/api/admin/purchases", async (req, res) => {
+    let raw = fs.readFileSync("orders.json");
+    let data = JSON.parse(raw);
+    res.status(200).json(data);
+  });
+  
+
+/*app.post("/api/session/verify", async (req, res) => {
     const sessionId = req.body.sessionId;
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -69,7 +138,7 @@ app.post("/api/session/verify", async (req, res) => {
     }
 
     console.log(session);
-});
+});*/
 
 
 app.listen(3000, () => {
