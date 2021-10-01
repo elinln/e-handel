@@ -62,8 +62,6 @@ app.post("/api/session/verify", async (req, res) => {
     );
   
     if (session.payment_status == "paid") {
-      //Spara
-      
       
       const key = session.payment_intent;
   
@@ -86,29 +84,7 @@ app.post("/api/session/verify", async (req, res) => {
       fs.writeFileSync("orders.json", JSON.stringify(data));
       res.json("Det funkar")
   
-      /*if (!data[key]) {
-        data[key] = {
-          sessionId: req.params.sessionId,
-          paymentIntent: session.payment_intent,
-          date: new Date(),
-          totalPrice: session.amount_total,
-          currency: session.currency,
-          products: session.line_items.data.map(
-            ({ id, description, price, amount_total }) => {
-              return {
-                id: id,
-                description: description,
-                unit_price: price.unit_amount,
-                currency: price.currency,
-                totalPrice: amount_total,
-              };
-            }
-          ),
-        };
-        data.push(data[key]);
-        fs.writeFileSync("orders.json", JSON.stringify(data));
-      }
-      res.status(200).json({ paid: true });*/
+     
     } else {
       res.status(200).json({ paid: false });
     }
@@ -119,26 +95,6 @@ app.post("/api/session/verify", async (req, res) => {
     let data = JSON.parse(raw);
     res.status(200).json(data);
   });
-  
-
-/*app.post("/api/session/verify", async (req, res) => {
-    const sessionId = req.body.sessionId;
-
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-    if (session.payment_status == "paid") {
-        //Spara lämplig information i JSON
-        const key = session.payment_intent;
-        if (!jsonDB[key]) {
-            jsonDB[key] = session;
-        }
-        res.status(200).json({ paid: true });
-    } else {
-        res.status(200).json({ paid: false });
-    }
-
-    console.log(session);
-});*/
 
 
 app.listen(3000, () => {
