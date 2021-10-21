@@ -55,10 +55,10 @@ app.post("/api/session/new", async (req, res) => {
 
 app.post("/api/session/verify", async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(
-      req.body.session,
-      {
+      req.body.orderid,
+      /*{
         expand: ["line_items"],
-      }
+      }*/
     );
   
     if (session.payment_status == "paid") {
@@ -67,17 +67,16 @@ app.post("/api/session/verify", async (req, res) => {
   
       let raw = fs.readFileSync("orders.json");
       let data = JSON.parse(raw);
+      console.log("nuvarande id" + req.body.orderid)
       let checkfordouble = data.find((orderdata) => {
-        return req.body.session == session.id
+        console.log("id från listan" + session.id)
+        return req.body.orderid === session.id
       })
-      if (checkfordouble) {
-        res.json("Denna ordern finns redan")
-        return
-      }
+     
     
      
       let order = {
-        sessionID: req.body.session, 
+        sessionID: req.body.orderid, 
         totaltprice: session.amount_total
       }
       data.push(order)

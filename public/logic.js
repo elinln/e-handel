@@ -1,4 +1,4 @@
-const { default: Stripe } = require("stripe");
+
 
 var listOfProducts;
 
@@ -96,42 +96,4 @@ function updateCartCount() {
     document.getElementById("cartNumber").textContent = count
 }
 
-const verify = async () => {
-    try {
-        const sessionId = localStorage.getItem("session");
-console.log(sessionId)
-        if (!sessionId) {
-            throw new Error("No session id to verify");
-        }
-
-        const response = await fetch('/api/session/verify', {
-            method: "POST",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify({
-                sessionId: sessionId
-            })
-        });
-        const { paid } = await response.json();
-        return paid;
-    }
-    catch (err) {
-        console.error(err);
-        return false;
-    }
-}
-
-async function checkVerification() {
-    const isVerified = await verify();
-    console.log("isVerified", isVerified);
-
-    if (localStorage.getItem("session")) {
-    if (isVerified) {
-        alert("Tack för ditt köp!")
-    } else {
-        alert("Jaha.")
-    }
-    localStorage.removeItem("session");
-} }
-
-checkVerification();
 
